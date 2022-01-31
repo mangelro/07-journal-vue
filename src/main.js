@@ -1,5 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './routes'
+import store from './store'
 
-createApp(App).use(router).mount('#app')
+import './styles/style.scss'
+//import  '../node_modules/beercss/dist/cdn/beer.min.js'
+
+createApp(App)
+.use(router)
+.use(store)
+.mount('#app')
