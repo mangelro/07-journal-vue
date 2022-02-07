@@ -4,17 +4,51 @@
               <i class="light-green-text">check_circle</i>
             </div>
             <div class="col">
+              <span>{{day}}</span>&nbsp;
+              <span>{{month}}</span>&nbsp;
+              <span>{{yearDate}}</span>
               <div>Title</div>
-              <label>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis dictum mauris, non interdum dolor. Nunc ut dapibus lorem. Donec congue ullamcorper quam sed tincidunt. Ut vitae nibh nibh. Sed nulla nisi, ultricies a odio vitae, sollicitudin consectetur mauris. Suspendisse facilisis diam sed tempor viverra. Donec ultricies, nisi luctus imperdiet gravida, ex augue maximus quam, a semper urna justo vitae elit. Morbi suscipit ut lacus at tincidunt. In id ornare lorem.</label>
+              <label>{{shortText}}</label>
             </div>
             <div class="col min">
               <nav>
-                <button class="none" @click="$router.push({name:'entry',params:{id:55}})">Ver</button>
-
+                <button class="none" @click="$router.push({name:'entry',params:{id:entry.id}})">Ver</button>
               </nav>
             </div>
           </div>
 </template>
+
+<script>
+
+import getDayMonthYear from '../helpers/getDayMonthYear'
+export default {
+  props:{
+    entry:{
+      type:Object,
+      required:true,
+    }
+  },
+
+  computed:{
+    shortText(){
+      return this.entry.text.length>130? this.entry.text.substring(0,130)+'...':this.entry.text
+    },
+    day(){
+      const {day} = getDayMonthYear(this.entry.date)
+      return day
+    },
+    month(){
+      const {month} = getDayMonthYear(this.entry.date)
+      return month
+    },
+    yearDate(){
+      const {year} = getDayMonthYear(this.entry.date)
+      return year
+    }
+  }
+
+}
+</script>
 
 <style  lang="scss" scoped>
 
