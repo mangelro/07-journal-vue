@@ -9,15 +9,13 @@ export default {
             path:'',
             name:'no-entry',
             component: ()=>import('../views/NoEntrySelected.vue'),
-
-          
+         
         },
         {
-            path:':id',
+            path:':id(\\d+)',
             name:'entry',
             component: ()=>import('../views/EntryView.vue'),
-              
-            //Esto se realiza cuando la ruta se crea NO cuando se cambia de ruta
+            //De esta form se hace más evidente el id necesario en el componente,
             props: (router)=>{
                 return {
                     id:router.params.id                        
