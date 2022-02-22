@@ -1,6 +1,6 @@
 import { defineAsyncComponent } from '@vue/runtime-core';
 <template>
-  <button class="fab circle extra">
+  <button class="fab circle extra" @click="$emit('on:click',$event)">
   <i>{{icon}}</i>
 </button>
 </template>
@@ -10,10 +10,11 @@ export default {
     props:{
         icon:{
             type:String,
-            required:false,
+            required:true,
             default:'save'
         }
-    }
+    },
+    emits:['on:click']
 }
 </script>
 

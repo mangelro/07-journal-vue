@@ -1,37 +1,49 @@
 <template>
 	<template v-if="entry">
-		<article class="border no-padding left-align top-align">
-		<div class="padding">
-			<h5>Day book</h5>
-			<span>{{ day }}</span
-			>&nbsp; <span>{{ month }}</span
-			>&nbsp;
-			<span>{{ yearDate }}</span>
-		</div>
-		<nav>
-			<button class="pink small"><i>delete</i><span>Borrar</span></button>
-			<button class="small"><i>send</i><span>Subir todo</span></button>
-		</nav>
-		</article>
+		
+  <div class="row">
+    <div class="col s12">
+      <article class="border no-padding left-align top-align">
+        <div class="padding">
+          <h5>Day book</h5>
+          <span>{{ day }}</span
+          >&nbsp; <span>{{ month }}</span
+          >&nbsp;
+          <span>{{ yearDate }}</span>
+        </div>
 
-		<div class="field textarea label border">
-		<textarea v-model="entry.text"></textarea>
-		<label>¿Qué sucedió hoy?</label>
-		</div>
+        <nav>
+          <input type="file" @change="onSelectedImage" ref="fileInput" v-show="false" accept="image/png,image/jpeg">
+          <button class="pink small" @click="onDeleteEntry" v-if="entry.id"><i>delete</i><span>Borrar</span></button>
+          <button class="small"  @click="onSelectImage"><i>send</i><span>Subir todo</span></button>
+        </nav>
+      </article>
+  </div>
+
+
+    <div class="col s12">
+      <div class="field textarea label border">
+        <textarea v-model="entry.text"></textarea>
+        <label>¿Qué sucedió hoy?</label>
+      </div>
+        <img :src="localImage" v-if="localImage" class="responsive">
+    </div>
+  </div>
 	</template>
-	<fab-button></fab-button>
+	<fab-button icon="save" @on:click="saveEntry"></fab-button>
 </template>
 
 <script>
 import { defineAsyncComponent } from "@vue/runtime-core";
-import { mapGetters } from "vuex"; //computed !!!
-import getDayMonthYear from "../../daybook/helpers/getDayMonthYear";
+import { mapGetters,mapActions } from "vuex"; //computed !!!
+import Swal from 'sweetalert2'
+import getDayMonthYear from "../../daybook/helpers/getDayMonthYear"
 
 export default {
   components: {
-    FabButton: defineAsyncComponent(() => import("@/components/FabButton")),
+    FabButton: defineAsyncComponent(() => import("@/components/FabButton"))
+    
   },
-
   props: {
     /*
      * Es más interesante colocar los parámetros de las url´s como props
@@ -48,6 +60,8 @@ export default {
   data() {
     return {
       entry: null,
+      localImage:null,
+      file:null,
     };
   },
 
@@ -69,15 +83,91 @@ export default {
   },
 
   methods: {
+
+    ...mapActions('journal',['updateEntry','createNewEntry','deleteEntry']),
+
     loadEntry() {
-      console.log("id", this.id);
 
-      const entry = this.getEntryById(this.id);
+      let entry
 
-      if (!entry) return this.$router.push({ name: "no-entry" });
+      if (this.id==='new')
+      {
+        entry={
+          text:'',
+          date:new Date().getTime()
+        }
+      }
+      else{
+        entry = this.getEntryById(this.id);
+        if (!entry) return this.$router.push({ name: "no-entry" });
+      }
 
       this.entry = entry;
     },
+    
+    async saveEntry(){
+
+      // new Swal({
+      //   title:'Espere, por favor.',
+      //   allowOutsideClick:false,
+      // })
+      
+      Swal.showLoading()
+
+      if(this.entry.id)
+      {
+        await this.updateEntry(this.entry)
+      }
+      else
+      {
+        const id= await this.createNewEntry(this.entry)
+        this.$router.push({name:'entry',params:{id}})
+      }
+
+      Swal.fire('Guardado','Entrada reagistrada correctamente','success')
+    },
+
+    async onDeleteEntry(){
+
+      //   const {isConfirmed}=await Swal.fire({
+      //     title:'Esta seguro',
+      //     text:'Una vez borrado no se puede recuperar',
+      //     showDenyButton:true
+      //   })
+
+      // console.log(result)
+
+        // if (result){
+          const {id}= this.entry
+          await this.deleteEntry(id)
+
+          this.$router.push({name:'no-entry'})
+        // }
+    },
+
+    onSelectedImage(event){
+      const file=event.target.files[0]
+
+      if (!file){
+        this.localImage=null
+        this.file=null
+        return
+      }
+
+      this.file=file
+      const fr=new FileReader()
+
+      fr.onload= () => this.localImage=fr.result
+
+      fr.readAsDataURL(file)
+
+
+    },
+
+    onSelectImage(){
+      this.$refs.fileInput.click()
+        
+    }
   },
   created() {
     this.loadEntry();

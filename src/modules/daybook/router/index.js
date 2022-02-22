@@ -12,7 +12,7 @@ export default {
          
         },
         {
-            path:':id(\\d+)',
+            path:':id',
             name:'entry',
             component: ()=>import('../views/EntryView.vue'),
             //De esta form se hace más evidente el id necesario en el componente,

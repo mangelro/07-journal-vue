@@ -5,7 +5,7 @@
     <div>No hay nada seleccionado</div>
   </div>
 </article>
-<fab-button></fab-button>
+<fab-button icon="add" @on:click="createNewEntry"></fab-button>
 </template>
 
 <script>
@@ -14,6 +14,11 @@ export default {
     components:{
       FabButton: defineAsyncComponent(()=>import('@/components/FabButton'))
     },
+    methods:{
+      async createNewEntry(){
+        this.$router.push({name:'entry', params:{id:'new'}})
+      }
+    }
 
 }
 </script>

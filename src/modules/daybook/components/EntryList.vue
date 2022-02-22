@@ -16,6 +16,9 @@
       </article>
     </div>
   </div>
+  <div>
+    <button @click="$router.push({name:'entry',params:{id:'new'}})">Nueva entrada</button>
+  </div>
 </template>
 
 <script>
@@ -39,7 +42,6 @@ export default {
 		*	Tanto el State y lo Getters son computed
 		*/
 		...mapGetters('journal',['getEntriesByTerm']),
-
 
 		entriesByTerm(){
 			return this.getEntriesByTerm(this.term) /* Pequeño truco para que un getter acepte parámetros: devolver una función que los acepte */
