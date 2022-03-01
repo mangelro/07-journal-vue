@@ -42,3 +42,9 @@
 	const entry =  state.entries.find(e=> e.id===id)
 	...
 	return {...entry}
+
+
+
+## Cloudinay
+	https://api.cloudinary.com/v1_1/fdoo/image/upload
+	upload_preset:curso-vue

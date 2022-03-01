@@ -1,34 +1,34 @@
 <template>
 	<template v-if="entry">
-		
-  <div class="row">
-    <div class="col s12">
-      <article class="border no-padding left-align top-align">
-        <div class="padding">
-          <h5>Day book</h5>
-          <span>{{ day }}</span
-          >&nbsp; <span>{{ month }}</span
-          >&nbsp;
-          <span>{{ yearDate }}</span>
-        </div>
+    <div class="row">
+      <div class="col s12">
+        <article class="border no-padding left-align top-align">
+          <div class="padding">
+            <h5>Day book</h5>
+            <span>{{ day }}</span
+            >&nbsp; <span>{{ month }}</span
+            >&nbsp;
+            <span>{{ yearDate }}</span>
+          </div>
 
-        <nav>
-          <input type="file" @change="onSelectedImage" ref="fileInput" v-show="false" accept="image/png,image/jpeg">
-          <button class="pink small" @click="onDeleteEntry" v-if="entry.id"><i>delete</i><span>Borrar</span></button>
-          <button class="small"  @click="onSelectImage"><i>send</i><span>Subir todo</span></button>
-        </nav>
-      </article>
-  </div>
-
-
-    <div class="col s12">
-      <div class="field textarea label border">
-        <textarea v-model="entry.text"></textarea>
-        <label>¿Qué sucedió hoy?</label>
-      </div>
-        <img :src="localImage" v-if="localImage" class="responsive">
+          <nav>
+            <input type="file" @change="onSelectedImage" ref="fileInput" v-show="false" accept="image/png,image/jpeg">
+            <button class="pink small" @click="onDeleteEntry" v-if="entry.id"><i>delete</i><span>Borrar</span></button>
+            <button class="small"  @click="onSelectImage"><i>send</i><span>Subir todo</span></button>
+          </nav>
+        </article>
     </div>
-  </div>
+
+
+      <div class="col s12">
+        <div class="field textarea label border">
+          <textarea v-model="entry.text"></textarea>
+          <label>¿Qué sucedió hoy?</label>
+        </div>
+          <img :src="localImage" v-if="localImage" class="responsive small"> 
+        <img :src="entry.picture" v-if="entry.picture" class="responsive small">
+      </div>
+    </div>
 	</template>
 	<fab-button icon="save" @on:click="saveEntry"></fab-button>
 </template>
@@ -39,6 +39,8 @@ import { mapGetters,mapActions } from "vuex"; //computed !!!
 import Swal from 'sweetalert2'
 import getDayMonthYear from "../../daybook/helpers/getDayMonthYear"
 
+import uploadImage from '../helpers/uploadImage'
+
 export default {
   components: {
     FabButton: defineAsyncComponent(() => import("@/components/FabButton"))
@@ -48,8 +50,8 @@ export default {
     /*
      * Es más interesante colocar los parámetros de las url´s como props
      * para acerlas mas evidentes.
-     * Se cargan desde el router a través del props, pero esto sucede solo
-     * al crear el componente, no cuando cambiamos la ruta
+     * Se cargan desde el router a través del props, 
+     * 
      */
     id: {
       type: String,
@@ -113,6 +115,10 @@ export default {
       // })
       
       Swal.showLoading()
+      
+      const picture =await uploadImage(this.file)
+
+      this.entry.picture=picture
 
       if(this.entry.id)
       {
@@ -124,6 +130,8 @@ export default {
         this.$router.push({name:'entry',params:{id}})
       }
 
+      this.file=null
+      this.localImage=null
       Swal.fire('Guardado','Entrada reagistrada correctamente','success')
     },
 
@@ -156,9 +164,7 @@ export default {
 
       this.file=file
       const fr=new FileReader()
-
       fr.onload= () => this.localImage=fr.result
-
       fr.readAsDataURL(file)
 
 
@@ -169,20 +175,23 @@ export default {
         
     }
   },
+
   created() {
     this.loadEntry();
   },
+
   mounted() {
     // eslint-disable-next-line no-undef
     this.$nextTick(() => ui());
   },
+
   watch: {
     id() {
       //console.log(value,oldValue)
       this.loadEntry();
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

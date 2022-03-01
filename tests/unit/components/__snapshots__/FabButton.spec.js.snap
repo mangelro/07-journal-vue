@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Prueba del componente FabButon  Debe renderizar el componente correctamente contra el snapshot 1`] = `<button class="fab circle extra"><i>save</i></button>`;
