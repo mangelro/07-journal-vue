@@ -42,6 +42,7 @@ import getDayMonthYear from "../../daybook/helpers/getDayMonthYear"
 import uploadImage from '../helpers/uploadImage'
 
 export default {
+  name:'EntryView',
   components: {
     FabButton: defineAsyncComponent(() => import("@/components/FabButton"))
     

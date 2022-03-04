@@ -9,7 +9,6 @@ export default {
             path:'',
             name:'no-entry',
             component: ()=>import('../views/NoEntrySelected.vue'),
-         
         },
         {
             path:':id',

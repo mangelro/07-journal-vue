@@ -11,8 +11,5 @@ describe('Prueba de About View',()=>{
 	test('Debe renderizar el componente correctamente contra el snapshot',()=>{
         const wrapper=shallowMount(About)
 		expect(wrapper.html()).toMatchSnapshot()
-
-	})
-
-
+    })
 })

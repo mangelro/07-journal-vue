@@ -11,12 +11,9 @@ const uploadImage = async (file) => {
 		formData.append('upload_preset','curso-vue')
 		formData.append('file',file)
 
-
 		const url=`https://api.cloudinary.com/v1_1/${repo}/image/upload`
 
 		const {data}= await axios.post(url,formData)
-
-		console.log (data)
 
 		return data.secure_url
 	}
@@ -24,7 +21,6 @@ const uploadImage = async (file) => {
 		console.log(error)
 		return null
 	}
-
 }
 
 export default uploadImage

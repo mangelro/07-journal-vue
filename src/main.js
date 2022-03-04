@@ -6,7 +6,4 @@ import store from './store'
 import './styles/style.scss'
 //import  '../node_modules/beercss/dist/cdn/beer.min.js'
 
-createApp(App)
-.use(router)
-.use(store)
-.mount('#app')
+createApp(App).use(router).use(store).mount('#app')

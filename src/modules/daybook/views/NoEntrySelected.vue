@@ -11,6 +11,7 @@
 <script>
 import { defineAsyncComponent } from '@vue/runtime-core'
 export default {
+    name:'NoEntrySelected',
     components:{
       FabButton: defineAsyncComponent(()=>import('@/components/FabButton'))
     },

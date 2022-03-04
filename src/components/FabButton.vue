@@ -1,6 +1,7 @@
+
 import { defineAsyncComponent } from '@vue/runtime-core';
 <template>
-  <button class="fab circle extra" @click="$emit('on:click',$event)">
+  <button class="fab circle extra" @click.prevent="$emit('on:click',$event)">
   <i>{{icon}}</i>
 </button>
 </template>
@@ -16,7 +17,3 @@ export default {
     emits:['on:click']
 }
 </script>
-
-<style>
-
-</style>
