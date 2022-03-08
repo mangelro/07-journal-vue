@@ -4,10 +4,12 @@ export default {
 
 		namespaced: true,
 
-		state:()=>({
-			isLoading:true,
-			entries:[]
-		}),
+		state(){
+			return{
+				isLoading:true,
+				entries:[]
+			}
+		},
 
 		mutations:{
 
@@ -22,10 +24,9 @@ export default {
 				state.entries[idx]=entry
 				state.isLoading=false
 			},
+
 			createEntry: (state,entry)=>{
 				
-				console.log('Mutation',entry)
-				//state.entries.unshift(entry)
 				state.entries= [entry, ...state.entries]
 				
 				state.isLoading=false
@@ -116,7 +117,6 @@ export default {
 						* fuera. Solo a traves de mutations se puede modificar el state
 						*/ 
 					//return state.entries.find(e=> e.id===id)
-
 
 					const entry =  state.entries.find(e=> e.id===id)
 
