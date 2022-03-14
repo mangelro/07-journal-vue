@@ -42,32 +42,32 @@ export default {
 
 		actions:{
 			loadEntries: async ({commit})=>{
-					const {data} = await journalApi.get('/entries.json')
-
-					const entries=[]
-
-					if (!data){
-						commit('setEntries',entries)
-						return
-					}
-
-
-					for (let id of Object.keys(data)){
-						entries.push({
-							id,
-							...data[id]
-						})
-					}
+				const {data} = await journalApi.get('/entries.json')
+				const entries=[]
+				if (!data){
 					commit('setEntries',entries)
+					return
+				}
+				for (let id of Object.keys(data)){
+					entries.push({
+						id,
+						...data[id]
+					})
+				}
+				commit('setEntries',entries)
 			},
 
 			updateEntry: async ({commit},entry)=>{
 
-				const {id,...resto}=entry
+				const{date,picture,text}=entry
+				
+				const dataToSave={date,picture,text}
 
-				await journalApi.put(`/entries/${id}.json`, resto)
+				await journalApi.put(`/entries/${entry.id}.json`, dataToSave)
 
-				commit('updateEntry',{...entry})
+				dataToSave.id=entry.id
+				
+				commit('updateEntry',{...dataToSave})
 			},
 
 			createNewEntry: async ({commit},entry)=>{

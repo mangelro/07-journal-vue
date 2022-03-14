@@ -29,7 +29,7 @@ describe("Vuex - Pruebas en el Journal Module",()=>{
 
 	}),
 
-	//******************************* MUTATIONS	
+	//****************************** MUTATIONS	
 	test('Mutations: setEntries', () => {
 		const store=createdViexStore({isLoading : true, entries : []})
 
@@ -87,7 +87,7 @@ describe("Vuex - Pruebas en el Journal Module",()=>{
 		expect(store.state.journal.isLoading).toBeFalsy()
 		expect(store.state.journal.entries.find(e=>e.id===deleteId)).toBeFalsy
 	}),
-	//***************************	GETTERS
+	//*****************************	GETTERS
 	test('Getters: getEntriesByTerm con término de búsqueda', () => {
 		const store=createdViexStore(journalMockState)
 
@@ -130,6 +130,58 @@ describe("Vuex - Pruebas en el Journal Module",()=>{
 	})
 
 	//****************************** ACTIONS
+
+	test('Actions: LoadEntries. Debería cargar las Entries ', async () => {
+		
+		const store=createdViexStore({isLoading : true, entries : []})
+		
+		await store.dispatch('journal/loadEntries')
+
+		expect(store.state.journal.entries.length).toBe(1) //ya que son las que existen en Firebase
+
+		// store.commit= jest.fn() //Se podría mockear el commit para ver si es llamado.
+		// expect(store.commit).toHaveBeenCalled()
+	})
+
+	test('Actions: UpdateEntry. Actualización entradas', async () => {
+		const store=createdViexStore(journalMockState)
+
+		const updatedEntry={
+			id:"-Mwm0kple69InwR9BYO4",
+			date : 1645811782393,
+			text : "Modificada en tests"
+		}
+
+		await store.dispatch('journal/updateEntry',updatedEntry)
+
+
+		expect(store.state.journal.entries.length).toBe(2)
+		expect(store.state.journal.entries.find(e=> e.id===updatedEntry.id)).toEqual(updatedEntry)
+
+	})
+
+	test('Actions: createEntry & deleteEntry', async () => {
+		const store=createdViexStore(journalMockState)
+
+		const newEntry={
+			date : 1645811782593,
+			text : "Añadida en tests"
+		}
+
+		const id=await store.dispatch('journal/createNewEntry',newEntry)
+
+		newEntry.id=id 
+
+		expect(typeof id).toBe('string')
+		expect(store.state.journal.entries.length).toBe(3)
+		expect(store.state.journal.entries.find(e=>e.id===id)).toBeTruthy()//.toEqual(newEntry)
+
+
+		await store.dispatch('journal/deleteEntry',id)
+
+		expect(store.state.journal.entries.length).toBe(2)
+		expect(store.state.journal.entries.find(e=>e.id===id)).toBeFalsy()
+	});
 
 
 })
