@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import dayBookRouter from '../modules/daybook/router'
+import authRouter from '../modules/auth/router'
 
 const routes = [
   {
@@ -22,6 +23,10 @@ const routes = [
   {
     path:'/daybook',
     ...dayBookRouter
+  },
+  {
+    path:'/auth',
+    ...authRouter
   }
 ]
 

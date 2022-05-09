@@ -9,7 +9,4 @@ const journalApi = axios.create({
 //process.env.NODE_ENV === 'test'
 //console.log(process.env.NODE_ENV)
 
-
-
-
 export default journalApi
