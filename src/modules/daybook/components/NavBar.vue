@@ -11,9 +11,31 @@
             <div>Day book</div>
         </router-link>
         
-        <a >
+        <a @click="onLogout" >
             <i>exit_to_app</i>
-            <div>logout</div>
+            <div>{{userName}}</div>
         </a>
     </div>
 </template>
+<script>
+import { useRouter } from 'vue-router'
+import useAuth from '../../auth/composables/useAuth'
+
+export default {
+    setup() {
+        const {userName, logout }=useAuth()
+
+        const router = useRouter();
+
+    return {
+        userName,
+        onLogout : ()=>{
+            router.push({name:'login'})
+            logout();
+
+        }
+    }
+
+    },
+}
+</script>

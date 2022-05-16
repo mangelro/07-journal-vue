@@ -34,6 +34,12 @@ export default {
 			state.entries = state.entries.filter(e => e.id !== id)
 			state.isLoading = false
 		},
+		clearEntries: (state) => {
+
+			state.entries = []
+			state.isLoading = false
+		},
+
 	},
 
 	actions: {
